@@ -1,5 +1,6 @@
 package com.codecool.mytodoapp.model.notes;
 
+import com.codecool.mytodoapp.model.category.ToDoCategory;
 import com.codecool.mytodoapp.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -22,6 +23,9 @@ public class TodoList {
     @GeneratedValue
     private long id;
     private String title;
+
+    @ManyToMany
+    private List<ToDoCategory> categories;
 
     @OneToMany(mappedBy = "todoList", cascade = CascadeType.ALL)
     @JsonManagedReference
