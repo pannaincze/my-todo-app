@@ -1,4 +1,4 @@
-package com.codecool.mytodoapp.service;
+package com.codecool.mytodoapp.repository;
 
 import com.codecool.mytodoapp.model.notes.TodoListItem;
 import org.springframework.data.jpa.repository.JpaRepository;
