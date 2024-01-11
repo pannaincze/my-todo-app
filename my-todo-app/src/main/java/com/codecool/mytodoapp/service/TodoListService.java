@@ -2,15 +2,19 @@ package com.codecool.mytodoapp.service;
 
 import com.codecool.mytodoapp.model.DAO.NewTodoListDAO;
 import com.codecool.mytodoapp.model.DAO.UpdateTodoListDAO;
+import com.codecool.mytodoapp.model.category.ToDoCategory;
 import com.codecool.mytodoapp.model.notes.TodoList;
 import com.codecool.mytodoapp.model.notes.TodoListItem;
 import com.codecool.mytodoapp.model.user.User;
+import com.codecool.mytodoapp.repository.ToDoCategoryRepository;
+import com.codecool.mytodoapp.repository.TodoListItemRepository;
 import com.codecool.mytodoapp.repository.TodoListRepository;
 import com.codecool.mytodoapp.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -19,6 +23,7 @@ public class TodoListService {
     private final TodoListRepository todoListRepository;
     private final UserRepository userRepository;
     private final TodoListItemRepository todoListItemRepository;
+    private final ToDoCategoryRepository toDoCategoryRepository;
 
     public List<TodoList> getAllTodoLists() {
         return todoListRepository.findAll();
@@ -42,6 +47,17 @@ public class TodoListService {
         todoListItemRepository.saveAll(todoListItems);
 
         todoList.setListItems(todoListItems);
+
+        List<TodoList> todoLists = new ArrayList<>();
+        todoLists.add(todoList);
+
+        List<ToDoCategory> categories = newTodoList.getCategories();
+        for (ToDoCategory category : categories) {
+            category.setTodoLists(todoLists);
+        }
+        toDoCategoryRepository.saveAll(categories);
+        todoList.setCategories(categories);
+
         return todoListRepository.save(todoList);
     }
 
