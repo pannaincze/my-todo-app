@@ -1,6 +1,7 @@
 package com.codecool.mytodoapp.controller;
 
 import com.codecool.mytodoapp.model.DAO.NewTodoListDAO;
+import com.codecool.mytodoapp.model.DAO.UpdateTodoListDAO;
 import com.codecool.mytodoapp.model.notes.TodoList;
 import com.codecool.mytodoapp.service.TodoListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,15 @@ public class TodoListController {
     @PostMapping("/new-todo")
     public TodoList createNewTodoList(@RequestBody NewTodoListDAO newTodoList) {
         return todoListService.createNewTodoList(newTodoList);
+    }
+
+    @PatchMapping("/update/{id}")
+    public TodoList editTodoList(@PathVariable long id, @RequestBody UpdateTodoListDAO updateTodoListDAO) {
+        return todoListService.editTodoList(id, updateTodoListDAO);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deleteTodoList(@PathVariable long id) {
+        todoListService.deleteTodoList(id);
     }
 }
