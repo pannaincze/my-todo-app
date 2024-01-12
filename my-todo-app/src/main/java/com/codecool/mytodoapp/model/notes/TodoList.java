@@ -10,6 +10,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class TodoList {
     private String title;
 
     @ManyToMany
-    private List<ToDoCategory> categories;
+    private Set<ToDoCategory> categories;
 
     @OneToMany(mappedBy = "todoList", cascade = CascadeType.ALL)
     @JsonManagedReference
