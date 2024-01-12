@@ -14,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,20 +44,33 @@ public class TodoListService {
             item.setTodoList(todoList);
         }
         todoListItemRepository.saveAll(todoListItems);
-
         todoList.setListItems(todoListItems);
 
+        Set<ToDoCategory> savedCategories = getSavedCategories(newTodoList, todoList);
+
+        todoList.setCategories(savedCategories);
+
+        return todoListRepository.save(todoList);
+    }
+
+    private Set<ToDoCategory> getSavedCategories(NewTodoListDAO newTodoList, TodoList todoList) {
         List<TodoList> todoLists = new ArrayList<>();
         todoLists.add(todoList);
 
-        List<ToDoCategory> categories = newTodoList.getCategories();
+        Set<ToDoCategory> categories = newTodoList.getCategories();
+        Set<ToDoCategory> savedCategories = new HashSet<>();
         for (ToDoCategory category : categories) {
-            category.setTodoLists(todoLists);
+            Optional<ToDoCategory> existingCategory = toDoCategoryRepository.findToDoCategoryByTitle(category.getTitle());
+            if (existingCategory.isPresent()) {
+                category = existingCategory.get();
+            } else {
+                category.setTodoLists(todoLists);
+                toDoCategoryRepository.save(category);
+            }
+            savedCategories.add(category);
         }
-        toDoCategoryRepository.saveAll(categories);
-        todoList.setCategories(categories);
 
-        return todoListRepository.save(todoList);
+        return savedCategories;
     }
 
 
