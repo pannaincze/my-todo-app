@@ -2,7 +2,9 @@ package com.codecool.mytodoapp.model.user;
 
 import com.codecool.mytodoapp.model.notes.TodoList;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -10,7 +12,6 @@ import java.util.List;
 @Setter
 @Entity
 @AllArgsConstructor
-@NoArgsConstructor
 @Table(name = "app_user")
 public class User {
     @Id
@@ -19,7 +20,14 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private int experiencePoints;
+    private int level;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<TodoList> todoLists;
+
+    public User() {
+        this.experiencePoints = 0;
+        this.level = 0;
+    }
 }
